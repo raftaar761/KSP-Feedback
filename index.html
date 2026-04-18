@@ -125,10 +125,33 @@
         .skip-btn {
             transition: all 0.2s ease;
             min-height: 36px;
+            color: rgba(255,255,255,0.55);
+            border-color: rgba(255,255,255,0.18) !important;
+        }
+        .skip-btn:hover {
+            color: rgba(255,255,255,0.8);
+            border-color: rgba(255,255,255,0.3) !important;
         }
         .skip-btn.skipped {
-            background: rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.5);
+            background: rgba(249,115,22,0.08);
+            color: rgba(249,115,22,0.7);
+            border-color: rgba(249,115,22,0.25) !important;
+        }
+
+        /* ── Improve feedback box ────────────────────── */
+        .improve-box {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s ease,
+                        margin-top 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .improve-box.open {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 12px;
         }
 
         /* ── Item rated glow ring ────────────────────── */
@@ -256,7 +279,7 @@
         <section class="mb-10">
             <p class="text-[11px] uppercase tracking-[0.2em] text-[#f97316] mb-2 font-semibold">April 2026</p>
             <h2 class="text-[32px] font-black leading-tight mb-3">How was the<br><span class="text-[#f97316]">food this month?</span></h2>
-            <p class="text-white/40 text-[14px] leading-relaxed">Rate each dish honestly — your taste shapes our menu.</p>
+            <p class="text-white/60 text-[14px] leading-relaxed">Rate each dish honestly — your taste shapes our menu.</p>
         </section>
 
         <!-- ── Name & Identity Card ── -->
@@ -268,12 +291,12 @@
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                         </svg>
                     </div>
-                    <h3 class="text-[13px] font-bold text-white/80 uppercase tracking-widest">Your Details</h3>
+                    <h3 class="text-[13px] font-bold text-white/90 uppercase tracking-widest">Your Details</h3>
                     <span class="ml-auto text-[10px] text-red-400 font-semibold">Required</span>
                 </div>
                 <div class="space-y-3">
                     <div>
-                        <label class="text-[11px] font-semibold text-white/40 uppercase tracking-wider block mb-1.5 px-1">Full Name *</label>
+                        <label class="text-[11px] font-semibold text-white/60 uppercase tracking-wider block mb-1.5 px-1">Full Name *</label>
                         <input
                             id="client-name"
                             type="text"
@@ -284,7 +307,7 @@
                         >
                     </div>
                     <div>
-                        <label class="text-[11px] font-semibold text-white/40 uppercase tracking-wider block mb-1.5 px-1">Flat / Block Number</label>
+                        <label class="text-[11px] font-semibold text-white/60 uppercase tracking-wider block mb-1.5 px-1">Flat / Block Number</label>
                         <input
                             id="client-phone"
                             type="text"
@@ -309,7 +332,7 @@
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                         </svg>
                     </div>
-                    <h3 class="text-[13px] font-bold text-white/80 uppercase tracking-widest">Your Thoughts</h3>
+                    <h3 class="text-[13px] font-bold text-white/90 uppercase tracking-widest">Your Thoughts</h3>
                 </div>
                 <textarea
                     id="suggestions"
@@ -329,7 +352,7 @@
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                         </svg>
                     </div>
-                    <h3 class="text-[13px] font-bold text-white/80 uppercase tracking-widest">Overall Experience</h3>
+                    <h3 class="text-[13px] font-bold text-white/90 uppercase tracking-widest">Overall Experience</h3>
                 </div>
                 <div class="flex gap-3 justify-center" id="overall-stars">
                     <!-- Stars injected by JS -->
@@ -454,8 +477,8 @@
                 header.className = 'flex items-center gap-3 mb-7';
                 header.innerHTML = `
                     <span class="category-pill px-4 py-1.5 rounded-full text-[11px] font-bold tracking-widest uppercase">${category}</span>
-                    <div class="h-px flex-1 bg-white/5"></div>
-                    <span class="text-[10px] text-white/20 font-medium">${items.length} dishes</span>
+                    <div class="h-px flex-1 bg-white/10"></div>
+                    <span class="text-[10px] text-white/40 font-medium">${items.length} dishes</span>
                 `;
                 section.appendChild(header);
 
@@ -464,14 +487,14 @@
                     const id = 'dish-' + item.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
                     const card = document.createElement('div');
                     card.id = `card-${id}`;
-                    card.className = 'item-card glass rounded-[24px] p-4 mb-5 border border-white/5 transition-all duration-300';
+                    card.className = 'item-card glass rounded-[24px] p-4 mb-5 border border-white/8 transition-all duration-300';
                     card.innerHTML = `
                         <div class="flex justify-between items-center mb-4">
-                            <h4 class="text-[16px] font-semibold text-white/85">${item}</h4>
+                            <h4 class="text-[16px] font-semibold text-white">${item}</h4>
                             <button
                                 id="skip-${id}"
                                 onclick="skipItem('${id}', '${item.replace(/'/g, "\\'")}')"
-                                class="skip-btn flex items-center gap-1 px-3 py-1.5 rounded-full border border-white/8 text-[10px] font-bold text-white/25 uppercase tracking-widest"
+                                class="skip-btn flex items-center gap-1 px-3 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-widest"
                             >
                                 ${icons.skip}
                                 <span id="skip-label-${id}">Skip</span>
@@ -481,7 +504,7 @@
                             <button
                                 id="loved-${id}"
                                 onclick="rate('${id}', 'loved')"
-                                class="rating-btn flex flex-col items-center justify-center gap-2 rounded-[18px] glass border border-white/5 text-white/25"
+                                class="rating-btn flex flex-col items-center justify-center gap-2 rounded-[18px] glass border border-white/10 text-white/50"
                             >
                                 ${icons.loved}
                                 <span class="text-[9px] font-black uppercase tracking-widest">Loved it</span>
@@ -489,7 +512,7 @@
                             <button
                                 id="fine-${id}"
                                 onclick="rate('${id}', 'fine')"
-                                class="rating-btn flex flex-col items-center justify-center gap-2 rounded-[18px] glass border border-white/5 text-white/25"
+                                class="rating-btn flex flex-col items-center justify-center gap-2 rounded-[18px] glass border border-white/10 text-white/50"
                             >
                                 ${icons.fine}
                                 <span class="text-[9px] font-black uppercase tracking-widest">Fine</span>
@@ -497,11 +520,23 @@
                             <button
                                 id="work-${id}"
                                 onclick="rate('${id}', 'needs-work')"
-                                class="rating-btn flex flex-col items-center justify-center gap-2 rounded-[18px] glass border border-white/5 text-white/25"
+                                class="rating-btn flex flex-col items-center justify-center gap-2 rounded-[18px] glass border border-white/10 text-white/50"
                             >
                                 ${icons.work}
                                 <span class="text-[9px] font-black uppercase tracking-widest">Improve</span>
                             </button>
+                        </div>
+                        <div id="improve-box-${id}" class="improve-box">
+                            <label class="text-[10px] font-bold text-[#f97316] uppercase tracking-widest block mb-2">
+                                What needs improvement? <span class="text-red-400">*</span>
+                            </label>
+                            <textarea
+                                id="improve-text-${id}"
+                                placeholder="Tell us what didn't work — too spicy, too bland, texture, portion size..."
+                                rows="3"
+                                class="ksp-input resize-none"
+                                style="border-radius:14px; font-size:13px; padding:12px 14px; border-color: rgba(249,115,22,0.3);"
+                            ></textarea>
                         </div>
                     `;
                     section.appendChild(card);
@@ -543,6 +578,17 @@
             activeBtn.classList.add('selected');
             if (value === 'loved') activeBtn.classList.add('loved-selected');
 
+            // Show/hide improve feedback box
+            const improveBox = document.getElementById(`improve-box-${id}`);
+            if (improveBox) {
+                if (value === 'needs-work') {
+                    improveBox.classList.add('open');
+                    setTimeout(() => document.getElementById(`improve-text-${id}`)?.focus(), 350);
+                } else {
+                    improveBox.classList.remove('open');
+                }
+            }
+
             // Card glow
             document.getElementById(`card-${id}`).classList.add('rated');
 
@@ -572,10 +618,11 @@
                 updateProgress();
             }
 
-            // Clear rating buttons
+            // Clear rating buttons & close improve box
             ['loved', 'fine', 'work'].forEach(type => {
                 document.getElementById(`${type}-${id}`)?.classList.remove('selected', 'loved-selected');
             });
+            document.getElementById(`improve-box-${id}`)?.classList.remove('open');
 
             // Mark skip button
             document.getElementById(`skip-${id}`).classList.add('skipped');
@@ -675,10 +722,39 @@
             spinner.classList.remove('hidden');
             document.getElementById('btn-text').innerText = 'Submitting...';
 
+            // Validate: if any dish is rated 'needs-work', its improve text must be filled
+            const missingImprove = Object.entries(ratings).find(([id, val]) => {
+                if (val !== 'needs-work') return false;
+                const txt = document.getElementById(`improve-text-${id}`);
+                return txt && !txt.value.trim();
+            });
+            if (missingImprove) {
+                const [badId] = missingImprove;
+                const box = document.getElementById(`improve-box-${badId}`);
+                box?.classList.add('open');
+                document.getElementById(`improve-text-${badId}`)?.focus();
+                showToast('Please describe what needs improvement for every dish you marked.');
+                btn.disabled = false;
+                icon.classList.remove('hidden');
+                spinner.classList.add('hidden');
+                document.getElementById('btn-text').innerText = 'Submit Feedback';
+                return;
+            }
+
+            // Collect all improve notes
+            const improveNotes = {};
+            Object.entries(ratings).forEach(([id, val]) => {
+                if (val === 'needs-work') {
+                    const txt = document.getElementById(`improve-text-${id}`);
+                    if (txt) improveNotes[id] = txt.value.trim();
+                }
+            });
+
             const payload = {
                 name: name,
                 phone: document.getElementById('client-phone').value.trim(),
                 ratings: ratings,
+                improveNotes: improveNotes,
                 overallRating: overallRating,
                 totalRated: totalRated,
                 suggestions: document.getElementById('suggestions').value.trim(),
